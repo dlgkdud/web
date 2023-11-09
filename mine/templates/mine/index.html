@@ -125,6 +125,7 @@
                 </div>
             </div>
         </div>
+        
         <div id="fail-toast-container" style="position: absolute; top: 40%;">
             <div id="fail-toast" class="toast">
                 <div class="toast-header">
@@ -153,8 +154,8 @@
     </div>
 
     <script type="text/javascript">
-        axios.get('/mine/make')
-        .then(mine);
+        axios.get('/mine/mine/make')
+        .then(make_mine);
       
       let timer_textbox = document.querySelector("#timer-box > h3");
       var elapsed_time = 0;
@@ -180,7 +181,7 @@
       let button_flexbox = document.querySelector("#submit-btn");
       
       button_flexbox.addEventListener("click",function(){
-        axios.post('/mine/check',
+        axios.post('/mine/mine/check',
                    get_mine_data()
                   ).then(process_result);
       });
@@ -226,29 +227,81 @@
       function make_mine(response){
         let board = response.data.board;
         let grid_container = document.querySelector(".gridbox-container");
+        grid_container.innerHTML = '';
         for(let i=0;i<9;i++){
-          for(let j=0;j<9;j++){
-            let node = document.createElement("div");
-            node.classList.add("gridbox-item")
-      
-            if(i!=0 && i%3==2)
-              node.classList.add("cell-padding-bottom");
-      
-            if(j!=0 && j%3==0)
-              node.classList.add("cell-padding-left");
-      
-            if(board[i][j]==0){      
-              node.contentEditable = true;
-              node.innerText = "";
-              node.classList.add("input-item-decorator");
-            }else{
-              node.innerText = board[i][j].toString();
-              node.classList.add("fixed-item-decorator");
+            for(let j=0;j<9;j++){
+              let cell = document.createElement('button');
+              // i, j 번째 행, 열 위치 지정
+              cell.setAttribute('data-row', i);
+              cell.setAttribute('data-col', j);
+              // board 데이터 설정
+              cell.setAttribute('mine', board[i][j]['mine']);
+              cell.setAttribute('flag', board[i][j]['flag']);
+              cell.setAttribute('open', board[i][j]['open']);
+              cell.setAttribute('mine_count_around', board[i][j]['mine_count_around']);
+              
+              // 좌, 우클릭 event 함수 연결
+              cell.addEventListener('click', onCellClick);
+              cell.addEventListener('contextmenu', onCellRightClick);
+              // 텍스트(테스트용) 표시
+              cell.innerText = board[i][j]['mine'].toString();
+              
+              cell.classList.add("gridbox-item");
+              grid_container.appendChild(cell);
+              // 클릭 함수, 우클릭 함수 만들어서 연결하기
+              // 지뢰 위치는 board에서 주니까 안해도 됨
+
+                {% comment %} let node = document.createElement("button");
+                node.addEventListener("click",function(){
+                  axios.post('/mine/mine/check',
+                             get_mine_data()
+                            ).then(process_result);
+                });
+                node.classList.add("gridbox-item")
+                
+                node.innerText = board[i][j]['mine'].toString();
+
+                grid_container.appendChild(node); {% endcomment %}
             }
-            grid_container.appendChild(node);
-          }
         }
+    }
+        // 셀 클릭 이벤트
+        function onCellClick(event) {
+          let cell = event.target;
+          const row = parseInt(cell.getAttribute('data-row'));
+          const col = parseInt(cell.getAttribute('data-col'));
+          const mine = $.parseJSON(cell.getAttribute('mine'));
+          const flag = $.parseJSON(cell.getAttribute('flag'));
+          
+          if (flag){ return }
+          if (mine) {
+            setTimeout(() => { // alert를 setTimeout 내에 넣어 화면 갱신을 허용한 후 메시지를 표시합니다.
+            alert('게임이 끝났습니다.');
+            axios.get('/mine/mine/make')
+            .then(make_mine);
+            }, 50);
+          } else {
+              // revealCell(row, col);
+          }
       }
+          // 오른쪽 클릭(깃발 설정 및 해제)
+    function onCellRightClick(event) {
+      event.preventDefault(); // 기본 오른쪽 클릭 메뉴를 나타나지 않게 합니다.
+      const cell = event.target;
+      
+      const mine = $.parseJSON(cell.getAttribute('mine'));
+      const flag = $.parseJSON(cell.getAttribute('flag'));
+      const open = $.parseJSON(cell.getAttribute('open'));
+      if (open) return; // 이미 클릭된 셀은 깃발 설정을 하지 않습니다.
+
+      if (flag) {
+        cell.setAttribute('flag', false);
+        cell.textContent = '';
+      } else {
+        cell.setAttribute('flag', true);
+        cell.textContent = '🚩';
+      }
+  }
     </script>
 </body>
 </html>

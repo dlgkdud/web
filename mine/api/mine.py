@@ -17,7 +17,7 @@ class Mine():
                         'flag': False} for _ in range(self.COLUMN_COUNT)]\
                         for _ in range(self.ROW_COUNT)]
         
-    def __make_mine(self, mine_count = 15):
+    def __make_mine(self, mine_count = 10):
         for _ in range(mine_count):
             while True:
                 self.column_index = random.randint(0, self.COLUMN_COUNT - 1)
@@ -29,7 +29,7 @@ class Mine():
 
     def generate_mine(self):
         self.__clean()
-        self.__make_mine(15)
+        self.__make_mine(10)
         return self.grid
     
     # 접근 가능한 셀인지 판단
@@ -40,7 +40,7 @@ class Mine():
             return False
 
     # 각 타일을 오픈
-    def __open_tile(self, column_index, row_index): 
+    def open_tile(self, column_index, row_index): 
         if not self.in_bound(column_index, row_index):
             return
     

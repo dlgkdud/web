@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지뢰찾기</title>
+    <!-- 게임 보드 스타일 -->
+    <style>
+        .board button {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+        }
+
+        .flagged {
+            background-color: yellow;
+            font-weight: bold;
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+<!-- 게임 보드 구성 -->
+<div class="board"></div>
+</body>
+<script>
+    const board = document.querySelector('.board');
+    const ROWS = 9;
+    const COLS = 9;
+    const MINES = 10;
+    let minePositions = [];
+    // 게임 시작
+    initializeGame();
+
+    function initializeGame() {
+        initializeBoard();
+        placeMines();
+    }
+
+    function initializeBoard() {
+        board.innerHTML = '';
+        for (let i = 0; i < ROWS; i++) {
+            let row = document.createElement('div');
+            for (let j = 0; j < COLS; j++) {
+                let cell = document.createElement('button');
+                cell.setAttribute('data-row', i);
+                cell.setAttribute('data-col', j);
+                cell.addEventListener('click', onCellClick);
+                cell.addEventListener('contextmenu', onCellRightClick);
+                row.appendChild(cell);
+            }
+            board.appendChild(row);
+        }
+    }
+
+
+    // 지뢰 위치 랜덤 설정
+    function placeMines() {
+        minePositions = [];
+        while (minePositions.length < MINES) {
+            let position = {
+                row: Math.floor(Math.random() * ROWS),
+                col: Math.floor(Math.random() * COLS)
+            };
+
+            if (!minePositions.some(pos => pos.row === position.row && pos.col === position.col)) {
+                minePositions.push(position);
+            }
+        }
+    }
+
+    // 셀 클릭 이벤트
+    function onCellClick(event) {
+        const row = parseInt(event.target.getAttribute('data-row'));
+        const col = parseInt(event.target.getAttribute('data-col'));
+        if (isMine(row, col)) {
+            alert('폭탄! 게임이 끝났습니다.');
+            initializeGame();
+        } else {
+            revealCell(row, col);
+        }
+    }
+
+    // 지뢰인지 확인
+    function isMine(row, col) {
+        return minePositions.some(pos => pos.row === row && pos.col === col);
+    }
+
+    // 셀 정보 표시
+    function revealCell(row, col) {
+        let minesAround = 0;
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                if (i !== 0 || j !== 0) {
+                    if (isMine(row + i, col + j)) {
+                        minesAround++;
+                    }
+                }
+            }
+        }
+
+        const cell = board.children[row].children[col];
+        cell.textContent = minesAround > 0 ? minesAround : '';
+        cell.disabled = true;
+    }
+
+
+    // 오른쪽 클릭(깃발 설정 및 해제)
+    function onCellRightClick(event) {
+        event.preventDefault(); // 기본 오른쪽 클릭 메뉴를 나타나지 않게 합니다.
+        const cell = event.target;
+        if (cell.disabled) return; // 이미 클릭된 셀은 깃발 설정을 하지 않습니다.
+
+        if (cell.classList.contains('flagged')) {
+            cell.classList.remove('flagged');
+            cell.textContent = '';
+        } else {
+            cell.classList.add('flagged');
+            cell.textContent = '🚩';
+        }
+    }
+
+    function onCellClick(event) {
+        const row = parseInt(event.target.getAttribute('data-row'));
+        const col = parseInt(event.target.getAttribute('data-col'));
+        const cell = event.target;
+
+        if (cell.classList.contains('flagged')) return; // 깃발이 있는 셀 클릭시 아무런 액션을 취하지 않습니다.
+
+        if (isMine(row, col)) {
+            alert('폭탄! 게임이 끝났습니다.');
+            initializeGame();
+        } else {
+            revealCell(row, col);
+        }
+    }
+
+    function onCellClick(event) {
+        const row = parseInt(event.target.getAttribute('data-row'));
+        const col = parseInt(event.target.getAttribute('data-col'));
+        const cell = event.target;
+
+        if (cell.classList.contains('flagged')) return;
+
+        if (isMine(row, col)) {
+            revealAllCells(); // 먼저 모든 셀의 정보를 공개합니다.
+            setTimeout(() => { // alert를 setTimeout 내에 넣어 화면 갱신을 허용한 후 메시지를 표시합니다.
+                alert('게임이 끝났습니다.');
+                initializeGame();
+            }, 50);
+        } else {
+            revealCell(row, col);
+        }
+    }
+
+    // 모든 셀 정보 표시
+    function revealAllCells() {
+        for (let i = 0; i < ROWS; i++) {
+            for (let j = 0; j < COLS; j++) {
+                const cell = board.children[i].children[j];
+                if (isMine(i, j)) {
+                    cell.textContent = '💣';
+                    cell.style.backgroundColor = 'red';
+                } else {
+                    const minesAround = countMinesAround(i, j);
+                    cell.textContent = minesAround > 0 ? minesAround : '';
+                }
+                cell.disabled = true;
+            }
+        }
+    }
+
+    // 주변 지뢰 수 계산
+    function countMinesAround(row, col) {
+        let minesAround = 0;
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                if (i !== 0 || j !== 0) {
+                    if (isMine(row + i, col + j)) {
+                        minesAround++;
+                    }
+                }
+            }
+        }
+        return minesAround;
+    }
+</script>

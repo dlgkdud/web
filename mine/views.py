@@ -15,7 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def index(request):
     context = {}
-    return render(request, 'sudoku/index.html',context)
+    return render(request, 'mine/index.html',context)
+    return render(request, 'mine/sol.html',context)
 
 
 def ranking(request):
@@ -29,7 +30,7 @@ def get_ranking_list(request):
 def register_ranking(request):
   return HttpResponse("register ranking page")
 
-
+@csrf_exempt
 def check_mine(request):
     mine_api = Mine()
     
@@ -38,7 +39,7 @@ def check_mine(request):
     puzzle = req_data['puzzle']
     elapsed_time = req_data['elapsed_time']
     
-    result = mine_api.__open_tile(puzzle)
+    result = mine_api.open_tile(puzzle)
     data = {}
     if result != 'mine':
         data['status'] = "clear"
@@ -49,7 +50,7 @@ def check_mine(request):
     
     return JsonResponse(data)
 
-
+@csrf_exempt
 def make_mine(request):
     mine_api = Mine()
     board = mine_api.generate_mine()
