@@ -37,6 +37,11 @@
             font-weight: bold;
             color: red;
           }
+
+          .opened {
+            background-color: #D3D3D3;
+            font-weight: bold;
+          }
           
           .input-item-decorator {
             color: rgba(136,137,220,1);
@@ -259,24 +264,18 @@
               cell.addEventListener('click', onCellClick);
               cell.addEventListener('contextmenu', onCellRightClick);
               // 텍스트(테스트용) 표시
-              cell.innerText = board[i][j]['mine'].toString();
+              if (board[i][j]['mine']) {
+                cell.innerText = "💣";
+              }
+              else{
+                cell.innerText = board[i][j]['mine_count_around'].toString();
+              }
+              
               
               cell.classList.add("gridbox-item");
               row.appendChild(cell);
               // 클릭 함수, 우클릭 함수 만들어서 연결하기
               // 지뢰 위치는 board에서 주니까 안해도 됨
-
-                {% comment %} let node = document.createElement("button");
-                node.addEventListener("click",function(){
-                  axios.post('/mine/mine/check',
-                             get_mine_data()
-                            ).then(process_result);
-                });
-                node.classList.add("gridbox-item")
-                
-                node.innerText = board[i][j]['mine'].toString();
-
-                grid_container.appendChild(node); {% endcomment %}
             }
             grid_container.appendChild(row);
         }
@@ -288,8 +287,11 @@
           const col = parseInt(cell.getAttribute('data-col'));
           const mine = $.parseJSON(cell.getAttribute('mine'));
           const flag = $.parseJSON(cell.getAttribute('flag'));
+          const open = $.parseJSON(cell.getAttribute('open'));
           
           if (flag){ return }
+          if (open){ return }
+
           if (mine) {
             setTimeout(() => { // alert를 setTimeout 내에 넣어 화면 갱신을 허용한 후 메시지를 표시합니다.
             alert('그 칸은 지뢰입니다!');
@@ -304,22 +306,27 @@
     // 클릭시 셀 열기
     function revealCell(row, col) {
       let grid_container = document.querySelector(".gridbox-container")
-      let minesAround = 0;
-      for (let i = -1; i <= 1; i++) {
-          for (let j = -1; j <= 1; j++) {
-              if (i !== 0 || j !== 0) {
-                let cell = grid_container.children[row];
-                grid_container.innerHTML = cell;
-                const mine = $.parseJSON(cell.getAttribute('mine'));
-                if (mine) {
-                    minesAround++;
-                }
-              }
-          }
+      let cell = grid_container.children[row].children[col];
+      if ($.parseJSON(cell.getAttribute('open'))) return;
+
+      cell.setAttribute('open', true)
+      cell.classList.add('opened');
+      cell.innerText = cell.getAttribute('mine_count_around');
+      let mine_count_around = cell.getAttribute('mine_count_around');
+      if (mine_count_around == 0) {
+        if (row > 0){
+          revealCell(row-1, col);
+        }
+        if (col > 0){
+          revealCell(row, col-1);
+        }
+        if (row < 9-1){
+          revealCell(row+1, col);
+        }
+        if (col < 9-1){
+          revealCell(row, col+1);
+        }
       }
-      const cell = grid_container.children[row].children[col];
-      cell.textContent = minesAround > 0 ? minesAround : '';
-      cell.open = true;
     }
 
 

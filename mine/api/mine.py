@@ -31,7 +31,7 @@ class Mine():
         for i in range(self.ROW_COUNT):
             for j in range(self.COLUMN_COUNT):
                 _tmp = self.__get_mine_count_around(i, j)
-                self.grid[i][j]['mine_count_around'] = _tmp
+                self.grid[j][i]['mine_count_around'] = _tmp
         return
 
     def generate_mine(self):
@@ -49,7 +49,7 @@ class Mine():
 
     # 각 타일을 오픈
     def open_tile(self, column_index, row_index): 
-        if not self.in_bound(column_index, row_index):
+        if not self.__in_bound(column_index, row_index):
             return
     
         tile = self.grid[row_index][column_index]
@@ -76,7 +76,7 @@ class Mine():
         arounds = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
         for dc, dr in arounds:
             column_index_around, row_index_around = (column_index + dc, row_index + dr)
-            if self.in_bound(column_index_around, row_index_around) and \
+            if self.__in_bound(column_index_around, row_index_around) and \
                 self.grid[row_index_around][column_index_around]['mine']:
                 count += 1
         return count
