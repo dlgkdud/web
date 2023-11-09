@@ -12,7 +12,15 @@
     <style>
         .gridbox-container {
             display: grid;
-            grid-template-columns: repeat(9, 3em);
+            grid-template-columns: repeat(9, 70px);
+          }
+
+          .gridbox-container button {
+            width: 70px;
+            height: 70px;
+            border: 1px solid rgba(0, 0, 0, 1);
+            text-align: center;
+            font-size: 1em;
           }
           
           .gridbox-item {
@@ -22,6 +30,12 @@
             font-size: 1em;
             text-align: center;
             font-weight: bold;
+          }
+
+          .flagged {
+            background-color: yellow;
+            font-weight: bold;
+            color: red;
           }
           
           .input-item-decorator {
@@ -229,6 +243,7 @@
         let grid_container = document.querySelector(".gridbox-container");
         grid_container.innerHTML = '';
         for(let i=0;i<9;i++){
+          let row = document.createElement('div');
             for(let j=0;j<9;j++){
               let cell = document.createElement('button');
               // i, j 번째 행, 열 위치 지정
@@ -247,7 +262,7 @@
               cell.innerText = board[i][j]['mine'].toString();
               
               cell.classList.add("gridbox-item");
-              grid_container.appendChild(cell);
+              row.appendChild(cell);
               // 클릭 함수, 우클릭 함수 만들어서 연결하기
               // 지뢰 위치는 board에서 주니까 안해도 됨
 
@@ -263,6 +278,7 @@
 
                 grid_container.appendChild(node); {% endcomment %}
             }
+            grid_container.appendChild(row);
         }
     }
         // 셀 클릭 이벤트
@@ -292,12 +308,12 @@
       for (let i = -1; i <= 1; i++) {
           for (let j = -1; j <= 1; j++) {
               if (i !== 0 || j !== 0) {
-                const cell = grid_container.children[row + i].children[col + j];
-                cell.textContent = 'a';
+                let cell = grid_container.children[row];
+                grid_container.innerHTML = cell;
                 const mine = $.parseJSON(cell.getAttribute('mine'));
-                  if (mine) {
-                      minesAround++;
-                  }
+                if (mine) {
+                    minesAround++;
+                }
               }
           }
       }
@@ -319,9 +335,11 @@
 
       if (flag) {
         cell.setAttribute('flag', false);
+        cell.classList.remove('flagged');
         cell.textContent = '';
       } else {
         cell.setAttribute('flag', true);
+        cell.classList.add('flagged');
         cell.textContent = '🚩';
       }
   }
