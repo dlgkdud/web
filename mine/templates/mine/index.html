@@ -136,8 +136,8 @@
                 </div>
             </div>
             <div id="button-flexbox">
-                <div>
-                    <a id="submit-btn" class="btn btn-primary" role="button">SUBMIT</a>
+                <div id="mine-counter">
+                  <h3>10</h3>
                 </div>
                 <div id="timer-box">
                     <h3>00:00:00</h3>
@@ -176,6 +176,7 @@
         axios.get('/mine/mine/make')
         .then(make_mine);
       
+      let mine_countbox = document.querySelector("#mine-counter > h3")
       let timer_textbox = document.querySelector("#timer-box > h3");
       var elapsed_time = 0;
       
@@ -197,13 +198,13 @@
       
       },1000);
       
-      let button_flexbox = document.querySelector("#submit-btn");
+      {% comment %} let button_flexbox = document.querySelector("#submit-btn");
       
       button_flexbox.addEventListener("click",function(){
         axios.post('/mine/mine/check',
                    get_mine_data()
                   ).then(process_result);
-      });
+      }); {% endcomment %}
       
       function get_mine_data() {
         let data = {
@@ -336,18 +337,26 @@
       const cell = event.target;
       
       const mine = $.parseJSON(cell.getAttribute('mine'));
-      const flag = $.parseJSON(cell.getAttribute('flag'));
       const open = $.parseJSON(cell.getAttribute('open'));
       if (open) return; // 이미 클릭된 셀은 깃발 설정을 하지 않습니다.
 
+      const flag = $.parseJSON(cell.getAttribute('flag'));
+      let num_flag = parseInt(mine_countbox.innerText);
       if (flag) {
         cell.setAttribute('flag', false);
         cell.classList.remove('flagged');
         cell.textContent = '';
+        num_flag += 1;
       } else {
         cell.setAttribute('flag', true);
         cell.classList.add('flagged');
         cell.textContent = '🚩';
+        num_flag -= 1;
+      }
+      mine_countbox.innerText = num_flag
+      num_flag = parseInt(mine_countbox.innerText);
+      if (num_flag == '0') {
+        // 여기에 지뢰 개수 0 되었을 때 정답인지 확인하는 함수 만들어서 넣으면 됨
       }
   }
     </script>
