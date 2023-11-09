@@ -26,10 +26,18 @@ class Mine():
                 if not tile['mine']:
                     tile['mine'] = True 
                     break
+    
+    def __set_mine_count(self):
+        for i in range(self.ROW_COUNT):
+            for j in range(self.COLUMN_COUNT):
+                _tmp = self.__get_mine_count_around(i, j)
+                self.grid[i][j]['mine_count_around'] = _tmp
+        return
 
     def generate_mine(self):
         self.__clean()
         self.__make_mine(10)
+        self.__set_mine_count()
         return self.grid
     
     # 접근 가능한 셀인지 판단
