@@ -9,4 +9,5 @@ urlpatterns = [
     path('mine/ranking', views.get_ranking_list, name='get_ranking_list'),
     path('mine/check', views.check_mine, name='check_mine'),
     path('mine/make', views.make_mine, name='make_mine'),
+    path('delete', views.delete, name='delete_data'),
 ]

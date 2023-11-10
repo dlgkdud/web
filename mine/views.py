@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views import templates
-# from mine.models import Ranking
+from mine.models import Ranking
 from .api.mine import Mine
 from django.core import serializers
 # from .models import Ranking
@@ -18,17 +18,38 @@ def index(request):
     return render(request, 'mine/index.html',context)
     return render(request, 'mine/sol.html',context)
 
-
+@csrf_exempt
 def ranking(request):
-  return HttpResponse("ranking view page")
+    context = {}
+    return render(request, 'mine/ranking.html',context)
 
-
+@csrf_exempt
 def get_ranking_list(request):
-  return HttpResponse("get ranking list page")
+    ranking_list = Ranking.objects.order_by('elapsed_time')[:100]
+    ranking_data = serializers.serialize("json",ranking_list, fields=('name','elapsed_time'))
+    ranking_data = json.loads(ranking_data)
+    ranking_data = [{**item['fields'],**{"pk" : item['pk']}} for item in ranking_data]
+    ranking_data = {
+        "data" : ranking_data
+    }
+    return JsonResponse(ranking_data)
 
-
+@csrf_exempt
 def register_ranking(request):
-  return HttpResponse("register ranking page")
+    if 'elapsed_time' not in request.session:
+        return JsonResponse({'status' : 'failed'})
+
+    data = json.loads(request.body)
+    name = data['name']
+    elapsed_time = request.session['elapsed_time']
+
+    datetime_args = elapsed_time//3600,(elapsed_time%3600)//60,elapsed_time%60
+    d = datetime.time(datetime_args[0], datetime_args[1], datetime_args[2]) 
+
+    ranking = Ranking(name = name, elapsed_time = d)
+    ranking.save()
+
+    return JsonResponse({'status' : 'success'})
 
 @csrf_exempt
 def check_mine(request):
@@ -59,3 +80,8 @@ def make_mine(request):
     }
 
     return JsonResponse(result)
+
+def delete(request) :
+    data = Ranking.objects.all()
+    data.delete()
+    return redirect('ranking')
