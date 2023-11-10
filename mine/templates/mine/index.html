@@ -76,8 +76,9 @@
             display: flex;
             flex: 2;
             flex-flow: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            height: 100%
         }
 
         #mine-flexbox {
@@ -120,25 +121,59 @@
         #fail-toast {
             position: relative;
         }
+
+        #go-home, #go-sudoku, #go-ranking{
+            width: 95%;
+            text-align: center;
+            padding: 5px;
+            padding-bottom: 0px;
+            background-color: rgba(200, 177, 232, 1);
+            border-radius: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        #new-game, #mine-counter, #timer-box{
+            width: 95%;
+            text-align: center;
+            padding: 5px;
+            padding-bottom: 0px;
+            background-color: rgba(200, 177, 232, 1);
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
     <div id="main-flexbox">
         <div id="nav-bar-flexbox">
-            <h3>WEB MINE!</h3>
+            <h3>😎지뢰찾기😎</h3>
         </div>
 
         <div id="content-flexbox">
-            <div id="dummy-flexbox"></div>
+            <div id="dummy-flexbox">
+                <div id="go-home">
+                    <h5>HOME</h5>
+                </div>
+                <div id="go-sudoku">
+                    <h5>SUDOKU</h5>
+                </div>
+                <div id="go-ranking" OnClick="location.href ='ranking'" >
+                    <h5>RANKING</h5>
+                </div>
+            </div>
             <div id="mine-flexbox">
                 <div class="gridbox-container"></div>
             </div>
             <div id="button-flexbox">
+                <div id="new-game">
+                    <h5>새 게임</h5>
+                </div>
                 <div id="mine-counter">
-                    <h3>10</h3>
+                    <h5>10</h5>
                 </div>
                 <div id="timer-box">
-                    <h3>00:00:00</h3>
+                    <h5>00:00:00</h5>
                 </div>
             </div>
         </div>
@@ -177,8 +212,8 @@
         axios.get('/mine/mine/make')
         .then(make_mine);
       
-        let mine_countbox = document.querySelector("#mine-counter > h3")
-        let timer_textbox = document.querySelector("#timer-box > h3");
+        let mine_countbox = document.querySelector("#mine-counter > h5")
+        let timer_textbox = document.querySelector("#timer-box > h5");
         var elapsed_time = 0;
         var open_count = 0;
       
@@ -294,7 +329,7 @@
             cell.classList.add('opened');
             cell.innerText = cell.getAttribute('mine_count_around');
             open_count += 1;
-            if(open_count == 1){ clear(); }
+            if(open_count == 71){ clear(); }
 
             let mine_count_around = cell.getAttribute('mine_count_around');
             if (mine_count_around == 0) {
