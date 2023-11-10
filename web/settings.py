@@ -24,13 +24,16 @@ SECRET_KEY = 'django-insecure-xj3)l@dz&=+)u17wg7=yopxu37b9)!3(#61#kjifv06b1$lu%&
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False # 배포 세팅1. 디버그모드를 꺼야 배포 가능!
+# DEBUG = False # 배포 세팅1. 디버그모드를 꺼야 배포 가능!
 
-# 배포 세팅2. 내 아이디
-ALLOWED_HOSTS = [
-    'gkdud.pythonanywhere.com'
-] # 이 주소가 아니라 다른 주소로 접근하면 막을 수 있도록 
+# # 배포 세팅2. 내 아이디
+# ALLOWED_HOSTS = [
+#     'gkdud.pythonanywhere.com'
+# ] # 이 주소가 아니라 다른 주소로 접근하면 막을 수 있도록 
 
+DEBUG = True
+
+ALLOWED_HOSTS = []
 
 # Application definition
 
