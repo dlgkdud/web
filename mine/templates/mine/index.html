@@ -244,7 +244,7 @@
             if (mine) {
                 $('#fail-toast-container').show();
                 $('#fail-toast').toast('show');
-
+                revealAllCells();
                 setTimeout(() => {
                     axios.get('/mine/mine/make')
                     .then(make_mine);
@@ -252,6 +252,24 @@
             }
             else {
                 revealCell(row, col);
+            }
+        }
+
+        function revealAllCells() {
+            let grid_container = document.querySelector(".gridbox-container");
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    const cell = grid_container.children[i].children[j];
+                    const mine = $.parseJSON(cell.getAttribute('mine'))
+                    if (mine) {
+                        cell.textContent = '💣';
+                        cell.style.backgroundColor = 'red';
+                    } else {
+                        cell.innerText = cell.getAttribute('mine_count_around');
+                    }
+                    cell.disabled = true;
+                    cell.style.textColor='black';
+                }
             }
         }
 
