@@ -148,7 +148,7 @@
         <div id="fail-toast-container" style="position: absolute; top: 40%;">
             <div id="fail-toast" class="toast">
                 <div class="toast-header">
-                    <strong class="mr-auto text-danger">제출한 답안이 틀렸습니다!</strong>
+                    <strong class="mr-auto text-danger">그 칸은 지뢰입니다!</strong>
                 </div>
                 <div class="toast-body text-danger">
                     제출한 답안이 틀렸습니다!
@@ -179,6 +179,7 @@
       let mine_countbox = document.querySelector("#mine-counter > h3")
       let timer_textbox = document.querySelector("#timer-box > h3");
       var elapsed_time = 0;
+      var open_count = 0;
       
       $('#success-toast-container').hide();
       $('#fail-toast-container').hide();
@@ -198,52 +199,6 @@
       
       },1000);
       
-      {% comment %} let button_flexbox = document.querySelector("#submit-btn");
-      
-      button_flexbox.addEventListener("click",function(){
-        axios.post('/mine/mine/check',
-                   get_mine_data()
-                  ).then(process_result);
-      }); {% endcomment %}
-      
-      function get_mine_data() {
-        let data = {
-          'elapsed_time':elapsed_time,
-        }
-      
-        let grid_container = document.querySelector(".gridbox-container");
-        let board = [];
-      
-        for(let i=0;i<9;i++){
-          for(let j=0;j<9;j++){
-            let k = i*9 + j;
-            let cell = grid_container.children[k];
-            if(k%9==0){ 
-              board.push([]);
-            }
-            board[i].push(Number(cell.innerText));
-          }
-        }
-      
-        data['puzzle'] = board;
-      
-        return data;
-      }
-      
-      function process_result(response) {
-        let status = response.data.status;
-        clearInterval(timer);
-      
-        if(status == 'clear'){
-          $('#success-toast-container').show();
-          $('#success-toast').toast('show');
-      
-        }else{
-          $('#fail-toast-container').show();
-          $('#fail-toast').toast('show');
-        }
-      }
-      
       function make_mine(response){
         let board = response.data.board;
         let grid_container = document.querySelector(".gridbox-container");
@@ -256,6 +211,8 @@
               cell.setAttribute('data-row', i);
               cell.setAttribute('data-col', j);
               // board 데이터 설정
+              if (board[i][j]['mine'] == true){
+              }
               cell.setAttribute('mine', board[i][j]['mine']);
               cell.setAttribute('flag', board[i][j]['flag']);
               cell.setAttribute('open', board[i][j]['open']);
@@ -294,11 +251,12 @@
           if (open){ return }
 
           if (mine) {
-            setTimeout(() => { // alert를 setTimeout 내에 넣어 화면 갱신을 허용한 후 메시지를 표시합니다.
-            alert('그 칸은 지뢰입니다!');
-            axios.get('/mine/mine/make')
-            .then(make_mine);
-            }, 50);
+            $('#fail-toast-container').show();
+            $('#fail-toast').toast('show');
+            setTimeout(() => {
+              axios.get('/mine/mine/make')
+              .then(make_mine);
+              }, 1000);
           } else {
               revealCell(row, col);
           }
@@ -313,6 +271,10 @@
       cell.setAttribute('open', true)
       cell.classList.add('opened');
       cell.innerText = cell.getAttribute('mine_count_around');
+
+      open_count += 1;
+      if(open_count == 71){ clear(); }
+
       let mine_count_around = cell.getAttribute('mine_count_around');
       if (mine_count_around == 0) {
         if (row > 0){
@@ -331,7 +293,7 @@
     }
 
 
-          // 오른쪽 클릭(깃발 설정 및 해제)
+    // 오른쪽 클릭(깃발 설정 및 해제)
     function onCellRightClick(event) {
       event.preventDefault(); // 기본 오른쪽 클릭 메뉴를 나타나지 않게 합니다.
       const cell = event.target;
@@ -354,10 +316,11 @@
         num_flag -= 1;
       }
       mine_countbox.innerText = num_flag
-      num_flag = parseInt(mine_countbox.innerText);
-      if (num_flag == '0') {
-        // 여기에 지뢰 개수 0 되었을 때 정답인지 확인하는 함수 만들어서 넣으면 됨
-      }
+  }
+   
+  function clear() {
+    $('#success-toast-container').show();
+    $('#success-toast').toast('show');
   }
     </script>
 </body>
