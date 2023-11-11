@@ -16,7 +16,6 @@ from django.views.decorators.csrf import csrf_exempt
 def index(request):
     context = {}
     return render(request, 'mine/index.html',context)
-    return render(request, 'mine/sol.html',context)
 
 @csrf_exempt
 def ranking(request):

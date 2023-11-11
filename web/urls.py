@@ -23,9 +23,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from . import views
 
 urlpatterns = [
-    path('', include('sudoku.urls')),
+    path('', views.index, name='main'),
+    path('sudoku/', include('sudoku.urls')),
     path('mine/', include('mine.urls')),
     path('admin/', admin.site.urls)
 ]
