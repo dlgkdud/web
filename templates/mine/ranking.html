@@ -1,6 +1,11 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
+
+{% block title %}<title>랭킹</title>{% endblock %}
+
 <html>
 <head>
+    {% block style %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -41,12 +46,29 @@
         #main-flexbox {
             margin-top: 1em;
         }
+        
+        #ranking-btn{
+            width: 180px;
+            text-align: center;
+            padding: 5px;
+            padding-bottom: 0px;
+            background-color: #FFB02E;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        {% comment %} #ranking-btn > h4{
+            font-weight: bold;
+        } {% endcomment %}
     </style>
+    {% endblock %}
 </head>
 <body>
+    {% block content %}
     <div id="main-flexbox">
         <div id="nav-bar-flexbox">
-            <h3>WEB MINE RANKING!</h3>
+            <h3>지뢰찾기 랭킹</h3>
         </div>
         <div id="content-flexbox">
             <div id="dummy-flexbox">
@@ -63,11 +85,14 @@
                 </tbody>
             </table>
             <div id="button-flexbox">
-                <a id="ranking-btn" class="btn btn-primary" role="button" href="/">메인 페이지</a>
+                <div id="ranking-btn"OnClick="location.href ='/mine'">
+                    <h4>게임하러 가기</h4>
+                </div>
             </div>
         </div>
     </div>
-
+    {% endblock %}
+    {% block script %}
     <script type="text/javascript">
         axios.get('/mine/mine/ranking')
         .then(get_mine_ranking);
@@ -93,4 +118,5 @@
             });
         }
     </script>
+    {% endblock %}
 </body>

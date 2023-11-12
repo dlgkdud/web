@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-
+APPEND_SLASH=False
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -50,6 +50,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mine.apps.MineConfig',
+    'user.apps.UserConfig',
     'sudoku.apps.SudokuConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -125,7 +126,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko'
 
 TIME_ZONE = 'UTC'
 

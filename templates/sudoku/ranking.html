@@ -1,6 +1,11 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
+
+{% block title %}<title>지뢰찾기</title>{% endblock %}
+
 <html>
 <head>
+    {% block style %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -42,8 +47,10 @@
             margin-top: 1em;
         }
     </style>
+    {% endblock %}
 </head>
 <body>
+    {% block content %}
     <div id="main-flexbox">
         <div id="nav-bar-flexbox">
             <h3>WEB SUDOKU RANKING!</h3>
@@ -67,7 +74,8 @@
             </div>
         </div>
     </div>
-
+    {% endblock %}
+    {% block script %}
     <script type="text/javascript">
         axios.get('sudoku/ranking')
         .then(get_sudoku_ranking);
@@ -93,4 +101,5 @@
             });
         }
     </script>
+    {% endblock %}
 </body>
