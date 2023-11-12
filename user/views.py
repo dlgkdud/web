@@ -42,6 +42,10 @@ def signup(request) :
     }
     return render(request, 'user/signup.html', context)
 
+
+def mypage(request) :
+    return render(request, 'user/mypage.html')
+
 def delete(request) :
     data = User.objects.all()
     data.delete()

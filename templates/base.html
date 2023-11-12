@@ -42,7 +42,7 @@
                 {% if not request.user.is_authenticated %}
                     <a href="/user/create/">가입하기</a>
                 {% else %}
-                    <a href="/user/create/">{{ request.user }}-마이페이지</a>
+                    <a href="/user/mypage/">{{ request.user }}-마이페이지</a>
                 {% endif %}
 
                 {% if request.user.is_authenticated %}
