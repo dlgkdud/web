@@ -3,6 +3,7 @@
 
 {% block title %}<title>메인화면</title>{% endblock %}
 
+{% load static %}
 <html>
 <head>
 
@@ -130,10 +131,10 @@
             <div id="dummy-flexbox"></div>
             <div id="sudoku-flexbox">
                 <div>
-                    스도쿠
+                    <img src="{% static 'images/sudoku.png' %}" alt='sudoku' height=300px width=300px/>
                 </div>
                 <div>
-                    지뢰찾기
+                    <img src="{% static 'images/mine.png' %}" alt='mine' height=300px width=300px/>
                 </div>
             </div>
             <div id="button-flexbox">

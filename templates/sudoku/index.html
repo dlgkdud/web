@@ -19,6 +19,7 @@
           grid-template-columns: repeat(9, 3em);
         }
 
+        
         .gridbox-item {
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 1);
@@ -120,7 +121,7 @@
             position: relative;
         }
 
-        #go-home, #go-mine, #go-ranking{
+        #go-home, #go-mine, #go-ranking {
             width: 150px;
             text-align: center;
             padding: 5px;
@@ -131,7 +132,18 @@
             cursor: pointer;
         }
 
-        #new-game, #mine-counter, #timer-box{
+        #new-game, #mine-counter {
+            width: 150px;
+            text-align: center;
+            padding: 5px;
+            padding-bottom: 0px;
+            background-color: #FFB02E;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        #timer-box {
             width: 150px;
             text-align: center;
             padding: 5px;
@@ -147,18 +159,18 @@
     {% block content %}
     <div id="main-flexbox">
         <div id="nav-bar-flexbox">
-            <h3>WEB SUDOKU!</h3>
+            <h3>✍️스도쿠✍️</h3>
         </div>
         <div id="content-flexbox">
             <div id="dummy-flexbox">
                 <div id="go-home"OnClick="location.href ='/'">
-                    <h4>HOME</h4>
+                    <h4>메인화면</h4>
                 </div>
                 <div id="go-mine" OnClick="location.href ='/mine'">
                     <h4>지뢰찾기</h4>
                 </div>
                 <div id="go-ranking" OnClick="location.href ='ranking'" >
-                    <h4>RANKING</h4>
+                    <h4>랭킹</h4>
                 </div>
             </div>
             <div id="sudoku-flexbox">
@@ -169,7 +181,7 @@
                     <h4>새 게임</h4>
                 </div>
                 <div id="mine-counter">
-                    <h4 id="submit-btn" role="button">10</h4>
+                    <h4 id="submit-btn" role="button">답안 제출</h4>
                 </div>
                 <div id="timer-box">
                     <h3>00:00:00</h3>
