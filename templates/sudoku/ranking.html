@@ -19,24 +19,25 @@
             flex-flow: column;
             align-items: center;
             height: 100%;
+            min-width: 1100px;
         }
 
         #content-flexbox{
             display: flex;
-            width: 70%;
+            min-width: 1100px;
             flex-flow: row;
         }
 
 
         #dummy-flexbox {
             display: flex;
-            width: 15%;
+            width: 200px;
             flex-flow: column;
         }
 
         #button-flexbox{
             display: flex;
-            width: 20%;
+            width: 200px;
             flex-flow: column;
             justify-content: center;
             align-items: center;
@@ -45,6 +46,17 @@
 
         #main-flexbox {
             margin-top: 1em;
+        }
+
+        #ranking-btn{
+            width: 200px;
+            text-align: center;
+            padding: 5px;
+            padding-bottom: 0px;
+            background-color: #FFB02E;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
         }
     </style>
     {% endblock %}
@@ -70,7 +82,10 @@
                 </tbody>
             </table>
             <div id="button-flexbox">
-                <a id="ranking-btn" class="btn btn-primary" role="button" href="/">메인 페이지</a>
+                <div id="ranking-btn" OnClick="location.href ='/sudoku/'">
+                    <h4>게임하러 가기</h4>
+                </div>
+                {% comment %} <a id="ranking-btn" class="btn btn-primary" role="button" href="/">메인 페이지</a> {% endcomment %}
             </div>
         </div>
     </div>
