@@ -65,8 +65,9 @@
             display: flex;
             flex: 2;
             flex-flow: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            height: 100%
         }
 
         #sudoku-flexbox {
@@ -94,9 +95,9 @@
             border-color: rgba(200, 177, 232, 1);
         }
 
-        #submit-btn {
+        {% comment %} #submit-btn {
             margin-bottom: 2em;
-        }
+        } {% endcomment %}
 
         #ranking-btn {
             margin-top: 1em;
@@ -119,6 +120,26 @@
             position: relative;
         }
 
+        #go-home, #go-mine, #go-ranking{
+            width: 150px;
+            text-align: center;
+            padding: 5px;
+            padding-bottom: 0px;
+            background-color: #FFB02E;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        #new-game, #mine-counter, #timer-box{
+            width: 150px;
+            text-align: center;
+            padding: 5px;
+            padding-bottom: 0px;
+            background-color: #FFB02E;
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
     </style>
     {% endblock %}
 </head>
@@ -268,8 +289,8 @@
             axios.post("sudoku/ranking/register",{
                 'name' : name
             }).then(function(response){
-                let status = response.data;
-                if(status == 'success'){
+                let status = response.data.status;
+                if(status == "success"){
                     location.href = "ranking";
                 }
                 $('#success-toast-container').hide();
