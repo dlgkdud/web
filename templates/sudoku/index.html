@@ -37,11 +37,14 @@
         }
 
         .cell-padding-left {
-            margin-left: 0.2em;
+            {% comment %} margin-left: 0.2em; {% endcomment %}
+            border-left: 3px solid #000000;
+            
         }
 
         .cell-padding-bottom {
-            margin-bottom: 0.2em;
+            {% comment %} margin-bottom: 0.2em; {% endcomment %}
+            border-bottom: 3px solid #000000;
         }
 
         #main-flexbox{
@@ -126,17 +129,26 @@
             <h3>WEB SUDOKU!</h3>
         </div>
         <div id="content-flexbox">
-            <div id="dummy-flexbox"></div>
-            <div id="sudoku-flexbox">
-                <div class="gridbox-container">
+            <div id="dummy-flexbox">
+                <div id="go-home"OnClick="location.href ='/'">
+                    <h4>HOME</h4>
+                </div>
+                <div id="go-mine" OnClick="location.href ='/mine'">
+                    <h4>지뢰찾기</h4>
+                </div>
+                <div id="go-ranking" OnClick="location.href ='ranking'" >
+                    <h4>RANKING</h4>
                 </div>
             </div>
+            <div id="sudoku-flexbox">
+                <div class="gridbox-container"></div>
+            </div>
             <div id="button-flexbox">
-                <div>
-                    <a id="submit-btn" class="btn btn-primary" role="button">SUBMIT</a>
+                <div id="new-game" OnClick="location.href = location.href">
+                    <h4>새 게임</h4>
                 </div>
-                <div>
-                    <a id="ranking-btn" class="btn btn-primary" role="button" href="ranking">랭킹 페이지</a>
+                <div id="mine-counter">
+                    <h4 id="submit-btn" role="button">10</h4>
                 </div>
                 <div id="timer-box">
                     <h3>00:00:00</h3>
@@ -272,7 +284,7 @@
                     let node = document.createElement("div");
                     node.classList.add("gridbox-item")
 
-                    if(i!=0 && i%3==2)
+                    if(i!=0 && i%3==2 && i!=8)
                         node.classList.add("cell-padding-bottom");
 
                     if(j!=0 && j%3==0)
