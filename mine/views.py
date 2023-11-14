@@ -35,12 +35,13 @@ def get_ranking_list(request):
 
 @csrf_exempt
 def register_ranking(request):
-    if 'elapsed_time' not in request.session:
-        return JsonResponse({'status' : 'failed'})
 
     data = json.loads(request.body)
+    print(data)
+    if 'elapsed_time' not in data:
+        return JsonResponse({'status' : 'failed'})
     name = data['name']
-    elapsed_time = request.session['elapsed_time']
+    elapsed_time = data['elapsed_time']
 
     datetime_args = elapsed_time//3600,(elapsed_time%3600)//60,elapsed_time%60
     d = datetime.time(datetime_args[0], datetime_args[1], datetime_args[2]) 

@@ -17,7 +17,7 @@
     <style>
         .gridbox-container {
           display: grid;
-          grid-template-columns: repeat(9, 3em);
+          grid-template-columns: repeat(2, 300px);
         }
 
         .gridbox-item {
@@ -118,6 +118,23 @@
             position: relative;
         }
 
+        #game-name{
+            width: 300px;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #img > img{
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        
+        #img {
+            cursor: pointer;
+        }
+
     </style>
     {% endblock %}
 </head>
@@ -130,11 +147,15 @@
         <div id="content-flexbox">
             <div id="dummy-flexbox"></div>
             <div id="sudoku-flexbox">
-                <div>
-                    <img src="{% static 'images/sudoku.png' %}" alt='sudoku' height=300px width=300px/>
-                </div>
-                <div>
-                    <img src="{% static 'images/mine.png' %}" alt='mine' height=300px width=300px/>
+                <div class="gridbox-container">
+                    <div id='img' OnClick="location.href ='/sudoku/'">
+                        <img src="{% static 'images/sudoku.png' %}" alt='sudoku' height=280px width=280px/>
+                    </div>
+                    <div id='img' OnClick="location.href ='/mine'">
+                        <img src="{% static 'images/mine.png' %}" alt='mine' height=280px width=280px/>
+                    </div>
+                    <div id='game-name' OnClick="location.href ='/sudoku/'">스도쿠</div>
+                    <div id='game-name' OnClick="location.href ='/mine'">지뢰찾기</div>
                 </div>
             </div>
             <div id="button-flexbox">

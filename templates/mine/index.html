@@ -405,6 +405,7 @@
         }
    
         function clear() {
+            clearInterval(timer);
             name_box.innerHTML = '😎지뢰찾기😎';
             $('#success-toast-container').show();
             $('#success-toast').toast('show');
@@ -412,7 +413,8 @@
 
         function submit_ranking(name){
             axios.post("/mine/mine/ranking/register",{
-                'name' : name
+                'name' : name,
+                'elapsed_time' : elapsed_time
             }).then(function(response){
                 location.href = "/mine/ranking";
                 $('#success-toast-container').hide();

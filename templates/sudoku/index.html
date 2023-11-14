@@ -16,11 +16,12 @@
     <style>
         .gridbox-container {
           display: grid;
-          grid-template-columns: repeat(9, 3em);
+          grid-template-columns: repeat(9, 60px);
         }
 
         
         .gridbox-item {
+            height: 60px;
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 1);
             padding: 1em;
@@ -163,7 +164,7 @@
         </div>
         <div id="content-flexbox">
             <div id="dummy-flexbox">
-                <div id="go-home"OnClick="location.href ='/'">
+                <div id="go-home" OnClick="location.href ='/'">
                     <h4>메인화면</h4>
                 </div>
                 <div id="go-mine" OnClick="location.href ='/mine'">
@@ -285,9 +286,9 @@
 
         function process_result(response) {
             let status = response.data.status;
-            clearInterval(timer);
 
             if(status == 'clear'){
+                clearInterval(timer);
                 $('#success-toast-container').show();
                 $('#success-toast').toast('show');
 

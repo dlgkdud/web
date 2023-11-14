@@ -17,11 +17,13 @@ def index(request):
     return render(request, 'sudoku/index.html',context)
 
 
+@csrf_exempt
 def ranking(request):
     context = {}
     return render(request, 'sudoku/ranking.html',context)
 
 
+@csrf_exempt
 def get_ranking_list(request):
     ranking_list = Ranking.objects.order_by('elapsed_time')[:10]
     ranking_data = serializers.serialize("json",ranking_list, fields=('name','elapsed_time'))
@@ -74,6 +76,7 @@ def check_sudoku(request):
     return JsonResponse(data)
 
 
+@csrf_exempt
 def make_sudoku(request):
     sudoku_api = Sudoku()
     board = sudoku_api.generate_sudoku()
@@ -85,7 +88,8 @@ def make_sudoku(request):
 
 
 
+@csrf_exempt
 def delete(request) :
     data = Ranking.objects.all()
     data.delete()
-    return redirect('ranking')
+    return redirect('/sudoku/ranking')
