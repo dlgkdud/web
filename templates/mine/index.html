@@ -111,9 +111,9 @@
         }
 
         .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited, .btn-primary:focus {
-            width: 8em;
-            background-color: rgba(200, 177, 232, 1);
-            border-color: rgba(200, 177, 232, 1);
+            width: 10em;
+            background-color: #FFB02E;
+            background-color: #FFB02E;
         }
 
         #submit-btn {
@@ -155,6 +155,26 @@
             background-color: #FFB02E;
             border-radius: 10px;
             margin-bottom: 5px;
+        }
+
+        .submit-btn {
+            width: 120px;
+            height: 30px;
+            background-color: #FFB02E;
+            border-radius: 10px;
+            text-align: center;
+            padding-top: 3px;
+            font-weight: bold;
+        }
+
+        .get-login {
+            width: 120px;
+            height: 30px;
+            background-color: #FFB02E;
+            border-radius: 10px;
+            text-align: center;
+            padding-top: 3px;
+            font-weight: bold;
         }
     </style>
     {% endblock %}
@@ -208,17 +228,31 @@
         <div id="success-toast-container" style="position: absolute; top: 40%;">
             <div id="success-toast" class="toast" data-autohide="false">
                 <div class="toast-header">
-                    <strong class="mr-auto text-primary">축하합니다 랭킹 등록 하시죠!</strong>
+                    <strong class="mr-auto text-primary">지뢰를 모두 찾았습니다!</strong>
                     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
                 </div>
-                <div class="toast-body text-danger">
-                    <div>
-                        <strong class="mr-auto text-primary">아이디 : </strong>
-                        <input id="ranking_username_textbox" type="text" />
-                    </div>
-                    <div style="display: flex; height: 4em; flex-flow: row; justify-content: center; align-items: center; flex-wrap: nowrap;">
-                        <a id="ranking_submit" type="button" class="btn text-primary btn-primary">랭킹 등록하기!</a>
-                    </div>
+                <div class="toast-body">
+                    {% if request.user.is_authenticated %}
+                        <div>
+                            <strong class="mr-auto text-primary">아이디 : </strong>
+                            <span class='user-id'>{{request.user}}</span>
+                            </br>
+                            <strong class="mr-auto text-primary">기록 : </strong>
+                            <span class='record'></span>
+                        </div>
+                        <div style="display: flex; height: 4em; flex-flow: row; justify-content: center; align-items: center; flex-wrap: nowrap;">
+                            <a id="ranking_submit" type="button" class="submit-btn">랭킹 등록하기</a>
+                        </div>
+                    {% else %}
+                        <div>
+                            <strong class="mr-auto text-primary">기록 : </strong>
+                            <span class='record'></span>
+                            </br>
+                            <strong class="mr-auto text-primary">로그인 해야 랭킹 등록이 가능합니다</strong>
+                        <div style="display: flex; height: 4em; flex-flow: row; justify-content: center; align-items: center; flex-wrap: nowrap;">
+                            <a id="ranking_submit" type="button" class="get-login" OnClick="location.href = '/user/login/'">로그인 하기</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -256,7 +290,7 @@
         let ranking_button = document.querySelector("#ranking_submit");
 
         ranking_button.addEventListener("click", function(){
-            let name = document.querySelector("#ranking_username_textbox").value;
+            let name = document.querySelector(".user-id").innerText;
             submit_ranking(name);
         });
       
@@ -413,6 +447,9 @@
             name_box.innerHTML = '😎지뢰찾기😎';
             $('#success-toast-container').show();
             $('#success-toast').toast('show');
+            record = document.querySelector(".record");
+            record.innerText = timer_textbox.innerText;
+            
         }
 
         function submit_ranking(name){

@@ -2,11 +2,90 @@
 <!DOCTYPE html>
 {% block title %}<title>로그인</title>{% endblock %}
 
+    {% block style %}
+    <style>
+        #main-flexbox{
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        #content-flexbox{
+            display: flex;
+            flex: 1;
+            width: 100%;
+            flex-flow: row;
+        }
+
+        #dummy-flexbox {
+            display: flex;
+            flex: 2;
+            flex-flow: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%
+        }
+
+        #mine-flexbox {
+            flex: 4;
+            flex-flow: row;
+            height: 100%;
+            align-items: center;
+        }
+
+        #mine-flexbox > .gridbox-container{
+            margin-left: auto;
+            margin-right: auto;
+            width: 640px;
+            justify-content: center;
+            border-top: 5px solid #808080;
+            border-left: 5px solid #808080;
+            border-bottom: 5px solid rgba(200, 200, 200, 1);
+            border-right: 5px solid rgba(200, 200, 200, 1);
+        }
+
+        #button-flexbox {
+            display: flex;
+            flex: 2;
+            flex-flow: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+         }
+    </style>
+
+    {% endblock %}
+
 {% block content %}
-<h1> 로그인 </h1>
-<form action="/user/login/" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type='submit'>
-</form>
+
+<div id="main-flexbox">
+    <div id="nav-bar-flexbox">
+        <h1>로그인</h1>
+    </div>
+    
+    <div id="content-flexbox">
+        <div id="dummy-flexbox">
+        </div>
+        <div id="mine-flexbox">
+            <form action="/user/login/" method="POST">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <input name="{{ field.html_name }}" id="{{ field.id_for_label }}" type="{{ field.field.widget.input_type }}" value="{{ field.value|default_if_none:'' }}">
+                    {% for error in field.errors %}
+                        <label class="control-label" for="{{ field.id_for_label }}">{{ error }}</label>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit">로그인하기</button>
+            </div>
+            </form>
+        </div>
+        <div id="button-flexbox">
+        </div>
+    </div>
 {% endblock %}

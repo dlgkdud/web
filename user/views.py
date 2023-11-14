@@ -6,6 +6,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.contrib.auth import logout as auth_logout
+from django.contrib import messages
 
 # Create your views here.
 def login(request) : 

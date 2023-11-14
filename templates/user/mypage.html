@@ -2,7 +2,172 @@
 <!DOCTYPE html>
 {% block title %}<title>마이페이지</title>{% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<style>
+    #main-flexbox{
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        height: 100%;
+        min-width: 1100px;
+    }
+
+    #content-flexbox{
+        display: flex;
+        min-width: 1100px;
+        flex-flow: row;
+    }
+
+
+    #dummy-flexbox {
+        display: flex;
+        width: 200px;
+        flex-flow: column;
+    }
+
+    #button-flexbox{
+        display: flex;
+        width: 200px;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    #main-flexbox {
+        margin-top: 1em;
+    }
+
+    #ranking-btn{
+        width: 180px;
+        text-align: center;
+        padding: 5px;
+        padding-bottom: 0px;
+        background-color: #FFB02E;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+    #ranking-name {
+        width: 100%;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    #left-table {
+        border-right: 1px solid #dddddd;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1> 마이페이지 </h1>
-개발 예정
+<input type='hidden' id='user-name' value={{request.user}}>
+<div id="main-flexbox">
+    <div id="nav-bar-flexbox">
+        <h1>마이페이지</h1>
+    </div>
+    <div id="content-flexbox">
+        <div id="dummy-flexbox">
+        </div>
+        <div id='left-table' style='width:100%;'>
+            <div id='ranking-name'>스도쿠 랭킹</div>
+            <table id="sudoku-ranking-table" class="table">
+                <thead>
+                    <tr>
+                        <th>등수</th>
+                        <th>아이디</th>
+                        <th>경과 시간</th>
+                    </tr>
+                </thead>
+                <tbody id="sudoku-ranking-list">
+                </tbody>
+            </table>
+        </div>
+        <div style='width:100%;'>
+            <div id='ranking-name'>지뢰찾기 랭킹</div>
+            <table id="mine-ranking-table" class="table">
+                <thead>
+                    <tr>
+                        <th>등수</th>
+                        <th>아이디</th>
+                        <th>경과 시간</th>
+                    </tr>
+                </thead>
+                <tbody id="mine-ranking-list">
+                </tbody>
+            </table>
+        </div>
+        <div id="button-flexbox">
+            <div id="ranking-btn"OnClick="location.href ='/sudoku/'">
+                <h4>스도쿠</h4>
+            </div>
+            <div id="ranking-btn"OnClick="location.href ='/mine/'">
+                <h4>지뢰찾기</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    let username = document.querySelector('#user-name').value;
+    axios.get('/mine/mine/ranking')
+    .then(get_mine_ranking);
+
+    function get_mine_ranking(response){
+        let ranking_data = response.data.data;
+        let ranking_list = document.querySelector("#mine-ranking-list")
+        let count = 1;
+        ranking_data.forEach(element => {
+            if (element.name == username){
+                let tr = document.createElement("tr");
+                let rankElement = document.createElement("td");
+                let userElement = document.createElement("td");
+                let timeElement = document.createElement("td");
+
+                rankElement.innerText = count.toString();
+                userElement.innerText = element.name;
+                timeElement.innerText = element.elapsed_time;
+                tr.appendChild(rankElement);
+                tr.appendChild(userElement);
+                tr.appendChild(timeElement);
+                ranking_list.appendChild(tr);
+            }
+            count += 1;
+        });
+    }
+    axios.get('/sudoku/sudoku/ranking')
+    .then(get_sudoku_ranking);
+
+    function get_sudoku_ranking(response){
+        let ranking_data = response.data.data;
+        let ranking_list = document.querySelector("#sudoku-ranking-list")
+        let count = 1;
+        ranking_data.forEach(element => {
+            if (element.name == username){
+                let tr = document.createElement("tr");
+                let rankElement = document.createElement("td");
+                let userElement = document.createElement("td");
+                let timeElement = document.createElement("td");
+
+                rankElement.innerText = count.toString();
+                userElement.innerText = element.name;
+                timeElement.innerText = element.elapsed_time;
+                tr.appendChild(rankElement);
+                tr.appendChild(userElement);
+                tr.appendChild(timeElement);
+                ranking_list.appendChild(tr);
+            }
+            count += 1;
+        });
+    }
+</script>
 {% endblock %}
